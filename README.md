@@ -1,0 +1,1 @@
+A data engineering project for extracting, transforming, analyzing, and visualizing BIM/Revit building data.
