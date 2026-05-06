@@ -1,0 +1,36 @@
+# Build results
+bin/
+obj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+.nuget/
+
+# Visual Studio
+.vs/
+.vscode/
+*.csproj.user
+*.sln.user
+*.suo
+*.user
+
+# IDE
+.idea/
+.DS_Store
+
+# Generated files
+*.db
+*.db-shm
+*.db-wal
+*.visidx
+DocumentLayout*.json
+
+# Cache
+.cache/
+*.cache

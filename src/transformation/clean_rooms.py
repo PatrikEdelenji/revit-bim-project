@@ -52,10 +52,9 @@ def clean_rooms(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     cleaned_df = cleaned_df.dropna(
-        subset=["room_id", "room_name", "area_m2", "volume_m3"]
+        subset=["room_id", "room_name", "area_m2"]
     )
 
     cleaned_df = cleaned_df[cleaned_df["area_m2"] > 0]
-    cleaned_df = cleaned_df[cleaned_df["volume_m3"] > 0]
 
     return cleaned_df
