@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "revit-bim-project"
+version = "0.1.0"
+description = "Data engineering pipeline for Revit BIM room analytics"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas",
+    "pyarrow",
+    "streamlit",
+    "plotly",
+    "scikit-learn",
+    "requests"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

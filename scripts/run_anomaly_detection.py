@@ -1,5 +1,5 @@
 import pandas as pd
-from src.ai.anomaly_detection import detect_room_anomalies
+from revit_bim_project.ai.anomaly_detection import detect_room_anomalies
 
 
 def main():
