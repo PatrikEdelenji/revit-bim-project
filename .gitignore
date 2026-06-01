@@ -10,3 +10,13 @@ data/processed/
 
 .DS_Store
 .vscode/
+
+
+# Visual Studio / C#
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
