@@ -35,13 +35,11 @@ def map_revit_rooms(df: pd.DataFrame) -> pd.DataFrame:
         }
     )
 
-    # Remove empty rows from Revit export
     mapped = mapped.dropna(subset=["room_id", "room_name"])
 
     mapped["area_m2"] = mapped["area_raw"].apply(parse_number_with_unit)
     mapped["volume_m3"] = mapped["volume_raw"].apply(parse_number_with_unit)
 
-    # Temporary placeholders until we export richer Revit schedules
     mapped["material"] = "Unknown"
     mapped["has_window"] = False
 

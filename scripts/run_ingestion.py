@@ -5,7 +5,9 @@ from src.transformation.map_revit_rooms import map_revit_rooms
 
 
 def main():
-    raw_df = load_rooms_csv("data/raw/revit_rooms_export.txt", skiprows=1)
+
+    #raw_df = load_rooms_csv("data/raw/revit_rooms_export.txt", skiprows=1) <- use this if you export with "Export title - ON"
+    raw_df = load_rooms_csv("data/raw/revit_rooms_export.txt")
 
     mapped_df = map_revit_rooms(raw_df)
     clean_df = clean_rooms(mapped_df)
