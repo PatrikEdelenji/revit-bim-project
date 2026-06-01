@@ -1,7 +1,7 @@
-from src.ingestion.load_rooms import load_rooms_csv
-from src.transformation.clean_rooms import clean_rooms
-from src.storage.save_rooms import save_rooms_parquet
-from src.transformation.map_revit_rooms import map_revit_rooms
+from revit_bim_project.ingestion.load_rooms import load_rooms_csv
+from revit_bim_project.transformation.clean_rooms import clean_rooms
+from storage.save_rooms import save_rooms_parquet
+from revit_bim_project.transformation.map_revit_rooms import map_revit_rooms
 
 
 def main():

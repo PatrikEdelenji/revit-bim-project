@@ -1,8 +1,8 @@
 import streamlit as st
-from src.ai.anomaly_detection import detect_room_anomalies
-from src.storage.load_processed import load_rooms_parquet
+from revit_bim_project.ai.anomaly_detection import detect_room_anomalies
+from storage.load_processed import load_rooms_parquet
 
-from src.analytics.room_metrics import (
+from revit_bim_project.analytics.room_metrics import (
     get_total_area_by_floor,
     get_material_summary,
     get_largest_rooms,
