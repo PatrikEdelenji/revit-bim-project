@@ -11,6 +11,8 @@ dependencies = [
     "pandas",
     "pyarrow",
     "streamlit",
+    "python-dotenv",
+    "openai",
     "plotly",
     "scikit-learn",
     "requests"
