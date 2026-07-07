@@ -7,7 +7,10 @@ from revit_bim_project.ai.openai_agent import (
     answer_bim_question_with_openai,
     generate_bim_quality_report,
 )
-
+from revit_bim_project.ai.openai_tool_agent import (
+    answer_bim_question_with_tool_calling,
+    answer_bim_question_with_tool_calling_debug,
+)
 
 st.set_page_config(
     page_title="BIM Intelligence Agent",
@@ -26,7 +29,11 @@ st.sidebar.header("Agent settings")
 
 agent_mode = st.sidebar.radio(
     "Choose agent mode:",
-    ["OpenAI agent", "Rule-based agent"],
+    [
+        "OpenAI tool-calling agent",
+        "OpenAI explanation agent",
+        "Rule-based agent",
+    ],
 )
 
 example_questions = [
@@ -70,10 +77,31 @@ if st.button("Ask BIM Agent"):
         st.warning("Please enter or select a question.")
     else:
         with st.spinner("Analyzing BIM data..."):
-            if agent_mode == "OpenAI agent":
+            if agent_mode == "OpenAI tool-calling agent":
+                result = answer_bim_question_with_tool_calling_debug(question)
+                answer = result["answer"]
+
+                st.subheader("Agent answer")
+                st.markdown(answer)
+
+                with st.expander("Agent debug info"):
+                    st.write(f"Elapsed time: {result['elapsed_seconds']:.2f} seconds")
+
+                    if result["tool_calls"]:
+                        st.write("Tools selected by OpenAI:")
+                        for tool_call in result["tool_calls"]:
+                            st.write(f"- `{tool_call['tool_name']}`")
+                            st.json(tool_call["arguments"])
+                    else:
+                        st.write("No tool was called.")
+
+            elif agent_mode == "OpenAI explanation agent":
                 answer = answer_bim_question_with_openai(question)
+                st.subheader("Agent answer")
+                st.markdown(answer)
+
             else:
                 answer = answer_bim_question(question)
+                st.subheader("Agent answer")
+                st.markdown(answer)
 
-        st.subheader("Agent answer")
-        st.markdown(answer)
