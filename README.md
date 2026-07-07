@@ -8,6 +8,10 @@ The project demonstrates an enterprise-style LLM agent workflow:
 
 User question → OpenAI tool-calling agent → BIM analytics tools → structured tool output → natural-language answer
 
+### BIM Intelligence Agent overview
+
+![BIM Quality Report](docs/images/bim-1.png)
+
 ## Features
 
 - Revit/BIM room data ingestion and transformation
