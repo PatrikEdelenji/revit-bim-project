@@ -1,15 +1,10 @@
 import streamlit as st
 
 from revit_bim_project.ai.agent import answer_bim_question
-from revit_bim_project.ai.openai_agent import answer_bim_question_with_openai
-
+from revit_bim_project.ai.safe_agent import answer_bim_question_safely
 from revit_bim_project.ai.openai_agent import (
     answer_bim_question_with_openai,
     generate_bim_quality_report,
-)
-from revit_bim_project.ai.openai_tool_agent import (
-    answer_bim_question_with_tool_calling,
-    answer_bim_question_with_tool_calling_debug,
 )
 
 st.set_page_config(
@@ -78,14 +73,22 @@ if st.button("Ask BIM Agent"):
     else:
         with st.spinner("Analyzing BIM data..."):
             if agent_mode == "OpenAI tool-calling agent":
-                result = answer_bim_question_with_tool_calling_debug(question)
+                result = answer_bim_question_safely(question)
                 answer = result["answer"]
 
                 st.subheader("Agent answer")
                 st.markdown(answer)
 
                 with st.expander("Agent debug info"):
-                    st.write(f"Elapsed time: {result['elapsed_seconds']:.2f} seconds")
+                    if result["elapsed_seconds"] is not None:
+                        st.write(f"Elapsed time: {result['elapsed_seconds']:.2f} seconds")
+                    else:
+                        st.write("Elapsed time: not available")
+                    st.write(f"Mode: `{result['mode']}`")
+
+                    if result["fallback_used"]:
+                        st.warning("OpenAI failed, so the app used the local rule-based fallback.")
+                        st.code(result["error"])
 
                     if result["tool_calls"]:
                         st.write("Tools selected by OpenAI:")

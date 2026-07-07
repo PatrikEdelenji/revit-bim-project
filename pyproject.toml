@@ -15,7 +15,8 @@ dependencies = [
     "openai",
     "plotly",
     "scikit-learn",
-    "requests"
+    "requests",
+    "duckdb",
 ]
 
 [tool.setuptools.packages.find]
