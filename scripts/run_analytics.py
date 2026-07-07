@@ -3,10 +3,11 @@ from revit_bim_project.analytics.room_metrics import (
     get_material_summary,
     get_largest_rooms,
 )
+from revit_bim_project.config.paths import PROCESSED_ROOMS_PATH
 
 
 def main():
-    parquet_path = "data/processed/rooms.parquet"
+    parquet_path = PROCESSED_ROOMS_PATH
 
     print("\nTotal area by floor:")
     print(get_total_area_by_floor(parquet_path))
