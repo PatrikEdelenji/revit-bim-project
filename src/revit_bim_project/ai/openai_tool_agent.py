@@ -13,6 +13,8 @@ from revit_bim_project.ai.tools import (
     anomalies_tool,
     material_summary_tool,
     bim_summary_tool,
+    bim_quality_rules_tool,
+    bim_quality_review_tool,
 )
 
 
@@ -36,8 +38,9 @@ TOOL_FUNCTIONS = {
     "anomalies_tool": anomalies_tool,
     "material_summary_tool": material_summary_tool,
     "bim_summary_tool": bim_summary_tool,
+    # "bim_quality_rules_tool": bim_quality_rules_tool,
+    "bim_quality_review_tool": bim_quality_review_tool,
 }
-
 
 TOOLS = [
     {
@@ -96,6 +99,36 @@ TOOLS = [
             "additionalProperties": False,
         },
     },
+    # {
+    #     "type": "function",
+    #     "name": "bim_quality_rules_tool",
+    #     "description": (
+    #         "Returns only the written BIM quality rules/checklist. "
+    #         "Use this only when the user specifically asks to see, list, or explain the rules themselves. "
+    #         "Do not use this to evaluate the current BIM model."
+    #     ),
+    #     "parameters": {
+    #         "type": "object",
+    #         "properties": {},
+    #         "additionalProperties": False,
+    #     },
+    # },
+    {
+        "type": "function",
+        "name": "bim_quality_review_tool",
+        "description": (
+            "Evaluates the current BIM model against BIM quality rules. "
+            "Returns both the BIM quality rules and actual BIM analytics data, including model summary, "
+            "detected anomalies, and material metadata. "
+            "Use this for questions about missing metadata, model quality, manual review, standards compliance, "
+            "whether the BIM model follows rules, or which rooms should be reviewed."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": False,
+        },
+    },
 ]
 
 
@@ -114,6 +147,12 @@ Important rules:
 - Round area and volume values to 2 decimal places.
 - Write clearly for a BIM engineer or project manager.
 - Do not offer unnecessary follow-up actions at the end.
+- If the user asks about standards, rules, requirements, quality checks, compliance, or whether the BIM data is good enough, use the BIM quality rules tool.
+- When comparing BIM data against rules, clearly separate actual BIM data findings from rule-based recommendations.
+- If the user asks whether the current BIM model has missing metadata, quality issues, compliance issues, or rooms needing manual review, you must use bim_quality_review_tool.
+- Use bim_quality_review_tool whenever the question requires both BIM rules and actual BIM model data.
+- Use bim_quality_rules_tool only if the user specifically asks to see or explain the written rules/checklist itself.
+- Do not answer model-quality questions using only bim_quality_rules_tool.
 """
 
 

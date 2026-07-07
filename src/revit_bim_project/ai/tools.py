@@ -6,7 +6,7 @@ from revit_bim_project.analytics.room_metrics import (
 from revit_bim_project.ai.anomaly_detection import detect_room_anomalies
 from revit_bim_project.config.paths import PROCESSED_ROOMS_PATH
 from revit_bim_project.storage.load_processed import load_rooms_parquet
-
+from revit_bim_project.ai.rag import load_bim_quality_rules
 
 def area_by_floor_tool() -> list[dict]:
     result = get_total_area_by_floor(PROCESSED_ROOMS_PATH)
@@ -47,6 +47,48 @@ def bim_summary_tool() -> list[dict]:
             "floor_with_largest_total_area": top_floor,
             "detected_anomaly_count": len(anomalies),
             "largest_rooms": largest_rooms,
+            "material_summary": materials,
+        }
+    ]
+
+
+def bim_quality_rules_tool() -> list[dict]:
+    """
+    Return BIM room quality rules from the local Markdown knowledge base.
+
+    This tool is useful when the user asks specifically about the rules,
+    standards, requirements, or checklist being used.
+    """
+
+    rules = load_bim_quality_rules()
+
+    return [
+        {
+            "document": "bim_room_quality_rules.md",
+            "content": rules,
+        }
+    ]
+
+
+def bim_quality_review_tool() -> list[dict]:
+    """
+    Return BIM quality rules together with actual BIM analytics data.
+
+    This tool is useful when the user asks about BIM quality,
+    missing metadata, standards, rules, or manual review.
+    """
+
+    rules = load_bim_quality_rules()
+    summary = bim_summary_tool()
+    anomalies = anomalies_tool()
+    materials = material_summary_tool()
+
+    return [
+        {
+            "rules_document": "bim_room_quality_rules.md",
+            "rules": rules,
+            "bim_summary": summary,
+            "detected_anomalies": anomalies,
             "material_summary": materials,
         }
     ]
