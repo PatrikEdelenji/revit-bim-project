@@ -23,5 +23,15 @@
     "question": "What materials are used?",
     "expected_tool": "material_summary_tool",
     "expected_contains": ["Unknown"]
+  },
+  {
+    "question": "Does this BIM model have missing metadata?",
+    "expected_tool": "bim_quality_review_tool",
+    "expected_contains": ["Unknown", "material"]
+  },
+  {
+    "question": "Which rooms should be manually reviewed according to the BIM quality rules?",
+    "expected_tool": "bim_quality_review_tool",
+    "expected_contains": ["P01", "review"]
   }
 ]
