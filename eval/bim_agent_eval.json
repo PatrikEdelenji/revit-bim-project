@@ -1,0 +1,27 @@
+[
+  {
+    "question": "Which floor has the most area?",
+    "expected_tool": "area_by_floor_tool",
+    "expected_contains": ["Parking"]
+  },
+  {
+    "question": "What are the largest rooms?",
+    "expected_tool": "largest_rooms_tool",
+    "expected_contains": ["P01", "Parking Garage"]
+  },
+  {
+    "question": "Are there any suspicious rooms?",
+    "expected_tool": "anomalies_tool",
+    "expected_contains": ["anomaly", "P01"]
+  },
+  {
+    "question": "Give me a BIM summary.",
+    "expected_tool": "bim_summary_tool",
+    "expected_contains": ["67", "5663"]
+  },
+  {
+    "question": "What materials are used?",
+    "expected_tool": "material_summary_tool",
+    "expected_contains": ["Unknown"]
+  }
+]
