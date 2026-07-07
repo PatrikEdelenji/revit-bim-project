@@ -3,6 +3,11 @@ import streamlit as st
 from revit_bim_project.ai.agent import answer_bim_question
 from revit_bim_project.ai.openai_agent import answer_bim_question_with_openai
 
+from revit_bim_project.ai.openai_agent import (
+    answer_bim_question_with_openai,
+    generate_bim_quality_report,
+)
+
 
 st.set_page_config(
     page_title="BIM Intelligence Agent",
@@ -41,6 +46,22 @@ custom_question = st.text_input(
     "Or ask your own question:",
     placeholder="Example: Which rooms should a BIM engineer review manually?",
 )
+
+
+st.divider()
+
+st.subheader("Generate BIM Quality Report")
+
+st.write(
+    "Generate a structured report summarizing building area, largest rooms, "
+    "detected anomalies, missing metadata, and recommended manual checks."
+)
+
+if st.button("Generate BIM Quality Report"):
+    with st.spinner("Generating BIM quality report..."):
+        report = generate_bim_quality_report()
+
+    st.markdown(report)
 
 question = custom_question or selected_question
 

@@ -103,3 +103,56 @@ def _build_summary_data() -> list[dict]:
             "material_summary": materials,
         }
     ]
+
+
+def generate_bim_quality_report() -> str:
+    """
+    Generate a structured BIM quality report using multiple BIM analytics tools.
+    """
+
+    floors = area_by_floor_tool()
+    largest_rooms = largest_rooms_tool(limit=5)
+    anomalies = anomalies_tool()
+    materials = material_summary_tool()
+
+    report_data = {
+        "area_by_floor": floors,
+        "largest_rooms": largest_rooms,
+        "detected_anomalies": anomalies,
+        "material_summary": materials,
+    }
+
+    prompt = f"""
+You are a BIM data quality assistant.
+
+Generate a professional BIM Quality Report using only the provided BIM analytics data.
+
+BIM analytics data:
+{json.dumps(report_data, indent=2)}
+
+Important domain rules:
+- The anomaly detection uses Isolation Forest.
+- In the anomaly_score field, -1 means the room was detected as an anomaly.
+- Do not say that -1 means missing or undefined.
+- If material is "Unknown", explain that the source BIM data is missing material information.
+- Use only the provided data.
+- Do not invent values.
+- Round area and volume values to 2 decimal places.
+- Write clearly for a BIM engineer, project manager, or technical reviewer.
+
+Structure the report with these sections:
+1. Executive Summary
+2. Building Area Overview
+3. Largest Rooms
+4. Detected Anomalies
+5. Missing or Weak Metadata
+6. Recommended Manual Checks
+7. Conclusion
+"""
+
+    response = client.responses.create(
+        model=model_name,
+        input=prompt,
+    )
+
+    return response.output_text
