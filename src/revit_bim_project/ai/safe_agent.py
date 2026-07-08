@@ -6,14 +6,20 @@ from revit_bim_project.utils.logging_utils import get_agent_logger
 
 logger = get_agent_logger()
 
-def answer_bim_question_safely(question: str) -> dict:
+def answer_bim_question_safely(
+        question: str,
+        conversation_history: list[dict] | None = None,
+    ) -> dict:
     """
     Try OpenAI tool-calling agent first.
     If it fails, fall back to the rule-based local agent.
     """
 
     try:
-        result = answer_bim_question_with_tool_calling_debug(question)
+        result = answer_bim_question_with_tool_calling_debug(
+            question=question,
+            conversation_history=conversation_history,
+        )
 
         tool_names = [
             tool_call["tool_name"]

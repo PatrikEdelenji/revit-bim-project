@@ -267,7 +267,10 @@ def answer_bim_question_with_tool_calling(question: str) -> str:
     return final_response.output_text
 
 
-def answer_bim_question_with_tool_calling_debug(question: str) -> dict:
+def answer_bim_question_with_tool_calling_debug(
+        question: str,
+        conversation_history: list[dict] | None = None,
+    ) -> dict:
     """
     OpenAI tool-calling BIM agent with debug metadata.
 
@@ -278,6 +281,8 @@ def answer_bim_question_with_tool_calling_debug(question: str) -> dict:
     """
 
     start_time = time.perf_counter()
+
+    history_text = _format_conversation_history(conversation_history)
 
     first_response = client.responses.create(
         model=model_name,
@@ -397,3 +402,24 @@ def _execute_tool_calls(response) -> list[dict[str, Any]]:
         )
 
     return tool_outputs
+
+
+def _format_conversation_history(
+    conversation_history: list[dict] | None,
+    max_messages: int = 4,
+) -> str:
+    if not conversation_history:
+        return "No previous conversation."
+
+    recent_messages = conversation_history[-max_messages:]
+
+    lines = ["Previous conversation:"]
+
+    for message in recent_messages:
+        question = message.get("question", "")
+        answer = message.get("answer", "")
+
+        lines.append(f"User: {question}")
+        lines.append(f"Assistant: {answer}")
+
+    return "\n".join(lines)
