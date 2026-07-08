@@ -17,6 +17,7 @@ dependencies = [
     "scikit-learn",
     "requests",
     "duckdb",
+    "pytest",
 ]
 
 [tool.setuptools.packages.find]
