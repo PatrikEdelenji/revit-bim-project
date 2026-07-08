@@ -29,6 +29,54 @@ def anomalies_tool() -> list[dict]:
     return result.to_dict(orient="records")
 
 
+def query_rooms_tool(
+    sort_by: str = "area_m2",
+    ascending: bool = False,
+    limit: int = 5,
+    floor: str | None = None,
+    material: str | None = None,
+    has_window: bool | None = None,
+) -> list[dict]:
+    """
+    Query BIM rooms with optional sorting, filtering, and limiting.
+
+    Useful for questions such as:
+    - largest rooms
+    - smallest rooms
+    - rooms by volume
+    - rooms on a specific floor
+    - rooms with unknown material
+    - rooms with or without windows
+    """
+
+    rooms_df = load_rooms_parquet(PROCESSED_ROOMS_PATH)
+
+    allowed_sort_columns = ["area_m2", "volume_m3"]
+
+    if sort_by not in allowed_sort_columns:
+        raise ValueError(
+            f"Unsupported sort column: {sort_by}. "
+            f"Allowed values are: {allowed_sort_columns}"
+        )
+
+    if floor is not None:
+        rooms_df = rooms_df[rooms_df["floor"].str.lower() == floor.lower()]
+
+    if material is not None:
+        rooms_df = rooms_df[rooms_df["material"].str.lower() == material.lower()]
+
+    if has_window is not None:
+        rooms_df = rooms_df[rooms_df["has_window"] == has_window]
+
+    result = (
+        rooms_df
+        .sort_values(sort_by, ascending=ascending)
+        .head(limit)
+    )
+
+    return result.to_dict(orient="records")
+
+
 def bim_summary_tool() -> list[dict]:
     floors = area_by_floor_tool()
     largest_rooms = largest_rooms_tool(limit=3)

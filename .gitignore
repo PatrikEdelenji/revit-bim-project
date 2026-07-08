@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .venv/
+.venv1/
 .env
 
 data/raw/
@@ -11,6 +12,7 @@ data/processed/
 .DS_Store
 .vscode/
 
+logs/
 
 # Visual Studio / C#
 .vs/

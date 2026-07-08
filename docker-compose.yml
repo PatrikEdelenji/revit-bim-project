@@ -1,0 +1,15 @@
+services:
+  bim-agent:
+    build: .
+    container_name: bim-intelligence-agent
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./docs:/app/docs
+      - ./eval:/app/eval
+      - ./logs:/app/logs
