@@ -20,9 +20,15 @@ def answer_bim_question_safely(question: str) -> dict:
             for tool_call in result["tool_calls"]
         ]
 
+        usage = result.get("usage") or {}
+
         logger.info(
-            "mode=openai_tool_calling | fallback=False | elapsed=%.2fs | question=%r | tools=%s",
+            "mode=openai_tool_calling | fallback=False | elapsed=%.2fs | model=%s | input_tokens=%s | output_tokens=%s | total_tokens=%s | question=%r | tools=%s",
             result["elapsed_seconds"],
+            result.get("model"),
+            usage.get("input_tokens"),
+            usage.get("output_tokens"),
+            usage.get("total_tokens"),
             question,
             tool_names,
         )
@@ -34,6 +40,8 @@ def answer_bim_question_safely(question: str) -> dict:
             "mode": "openai_tool_calling",
             "fallback_used": False,
             "error": None,
+            "model": result.get("model"),
+            "usage": result.get("usage"),
         }
 
     except Exception as error:
@@ -52,4 +60,6 @@ def answer_bim_question_safely(question: str) -> dict:
             "mode": "rule_based_fallback",
             "fallback_used": True,
             "error": str(error),
+            "model": None,
+            "usage": None,
         }

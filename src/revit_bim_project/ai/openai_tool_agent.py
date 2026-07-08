@@ -246,10 +246,18 @@ def answer_bim_question_with_tool_calling_debug(question: str) -> dict:
 
     if not tool_outputs:
         elapsed_seconds = time.perf_counter() - start_time
+        usage = getattr(first_response, "usage", None)
+
         return {
             "answer": first_response.output_text,
             "tool_calls": [],
             "elapsed_seconds": elapsed_seconds,
+            "model": model_name,
+            "usage": {
+                "input_tokens": getattr(usage, "input_tokens", None) if usage else None,
+                "output_tokens": getattr(usage, "output_tokens", None) if usage else None,
+                "total_tokens": getattr(usage, "total_tokens", None) if usage else None,
+            },
         }
 
     second_input: list[dict[str, Any]] = [
@@ -282,10 +290,18 @@ def answer_bim_question_with_tool_calling_debug(question: str) -> dict:
 
     elapsed_seconds = time.perf_counter() - start_time
 
+    usage = getattr(final_response, "usage", None)
+
     return {
         "answer": final_response.output_text,
         "tool_calls": tool_outputs,
         "elapsed_seconds": elapsed_seconds,
+        "model": model_name,
+        "usage": {
+            "input_tokens": getattr(usage, "input_tokens", None) if usage else None,
+            "output_tokens": getattr(usage, "output_tokens", None) if usage else None,
+            "total_tokens": getattr(usage, "total_tokens", None) if usage else None,
+        },
     }
 
 

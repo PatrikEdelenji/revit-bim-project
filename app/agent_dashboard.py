@@ -97,6 +97,15 @@ if st.button("Ask BIM Agent"):
                     }
                 )
                 with st.expander("Agent debug info"):
+
+                    if result.get("model"):
+                        st.write(f"Model: `{result['model']}`")
+
+                    usage = result.get("usage")
+                    if usage:
+                        st.write("Token usage:")
+                        st.json(usage)
+
                     if result["elapsed_seconds"] is not None:
                         st.write(f"Elapsed time: {result['elapsed_seconds']:.2f} seconds")
                     else:
