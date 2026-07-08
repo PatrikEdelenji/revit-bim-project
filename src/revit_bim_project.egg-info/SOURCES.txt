@@ -8,6 +8,11 @@ src/revit_bim_project.egg-info/top_level.txt
 src/revit_bim_project/ai/__init__.py
 src/revit_bim_project/ai/agent.py
 src/revit_bim_project/ai/anomaly_detection.py
+src/revit_bim_project/ai/langchain_agent.py
+src/revit_bim_project/ai/openai_agent.py
+src/revit_bim_project/ai/openai_tool_agent.py
+src/revit_bim_project/ai/rag.py
+src/revit_bim_project/ai/safe_agent.py
 src/revit_bim_project/ai/tools.py
 src/revit_bim_project/analytics/__init__.py
 src/revit_bim_project/analytics/room_metrics.py
@@ -19,3 +24,8 @@ src/revit_bim_project/storage/save_rooms.py
 src/revit_bim_project/transformation/__init__.py
 src/revit_bim_project/transformation/clean_rooms.py
 src/revit_bim_project/transformation/map_revit_rooms.py
+src/revit_bim_project/utils/__init__.py
+src/revit_bim_project/utils/logging_utils.py
+tests/test_anomaly_detection.py
+tests/test_rag.py
+tests/test_tools.py
