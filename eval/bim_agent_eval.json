@@ -33,5 +33,15 @@
     "question": "Which rooms should be manually reviewed according to the BIM quality rules?",
     "expected_tool": "bim_quality_review_tool",
     "expected_contains": ["P01", "review"]
+  },
+  {
+    "question": "What is the smallest room?",
+    "expected_tool": "query_rooms_tool",
+    "expected_contains": ["m²"]
+  },
+  {
+    "question": "What is the largest room by volume?",
+    "expected_tool": "query_rooms_tool",
+    "expected_contains": ["m³"]
   }
 ]

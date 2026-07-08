@@ -15,6 +15,7 @@ from revit_bim_project.ai.tools import (
     bim_summary_tool,
     bim_quality_rules_tool,
     bim_quality_review_tool,
+    query_rooms_tool,
 )
 
 
@@ -35,10 +36,10 @@ client = OpenAI(api_key=api_key)
 TOOL_FUNCTIONS = {
     "area_by_floor_tool": area_by_floor_tool,
     "largest_rooms_tool": largest_rooms_tool,
+    "query_rooms_tool": query_rooms_tool,
     "anomalies_tool": anomalies_tool,
     "material_summary_tool": material_summary_tool,
     "bim_summary_tool": bim_summary_tool,
-    # "bim_quality_rules_tool": bim_quality_rules_tool,
     "bim_quality_review_tool": bim_quality_review_tool,
 }
 
@@ -65,6 +66,56 @@ TOOLS = [
                     "description": "Maximum number of largest rooms to return.",
                     "default": 5,
                 }
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
+        "type": "function",
+        "name": "query_rooms_tool",
+        "description": (
+            "Query BIM rooms with flexible sorting, filtering, and limiting. "
+            "Use this for questions about largest rooms, smallest rooms, rooms by area, "
+            "rooms by volume, rooms on a specific floor, rooms with a specific material, "
+            "or rooms with/without windows."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "sort_by": {
+                    "type": "string",
+                    "enum": ["area_m2", "volume_m3"],
+                    "description": "Column to sort rooms by.",
+                    "default": "area_m2",
+                },
+                "ascending": {
+                    "type": "boolean",
+                    "description": (
+                        "Sort order. Use true for smallest/lowest values, "
+                        "false for largest/highest values."
+                    ),
+                    "default": False,
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Maximum number of rooms to return.",
+                    "default": 5,
+                },
+                "floor": {
+                    "type": ["string", "null"],
+                    "description": "Optional floor/level filter.",
+                    "default": None,
+                },
+                "material": {
+                    "type": ["string", "null"],
+                    "description": "Optional material filter, such as Unknown.",
+                    "default": None,
+                },
+                "has_window": {
+                    "type": ["boolean", "null"],
+                    "description": "Optional window filter.",
+                    "default": None,
+                },
             },
             "additionalProperties": False,
         },
@@ -129,6 +180,7 @@ TOOLS = [
             "additionalProperties": False,
         },
     },
+    
 ]
 
 
@@ -322,6 +374,17 @@ def _execute_tool_calls(response) -> list[dict[str, Any]]:
         if tool_name == "largest_rooms_tool":
             limit = arguments.get("limit", 5)
             result = TOOL_FUNCTIONS[tool_name](limit=limit)
+
+        elif tool_name == "query_rooms_tool":
+            result = TOOL_FUNCTIONS[tool_name](
+                sort_by=arguments.get("sort_by", "area_m2"),
+                ascending=arguments.get("ascending", False),
+                limit=arguments.get("limit", 5),
+                floor=arguments.get("floor"),
+                material=arguments.get("material"),
+                has_window=arguments.get("has_window"),
+            )
+
         else:
             result = TOOL_FUNCTIONS[tool_name]()
 
