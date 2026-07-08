@@ -20,6 +20,9 @@ st.write(
     "The agent can analyze floor areas, largest rooms, anomalies, materials, and building summaries."
 )
 
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
 st.sidebar.header("Agent settings")
 
 agent_mode = st.sidebar.radio(
@@ -65,6 +68,13 @@ if st.button("Generate BIM Quality Report"):
 
     st.markdown(report)
 
+    st.download_button(
+        label="Download report as Markdown",
+        data=report,
+        file_name="bim_quality_report.md",
+        mime="text/markdown",
+    )
+
 question = custom_question or selected_question
 
 if st.button("Ask BIM Agent"):
@@ -79,6 +89,13 @@ if st.button("Ask BIM Agent"):
                 st.subheader("Agent answer")
                 st.markdown(answer)
 
+                st.session_state.messages.append(
+                    {
+                        "question": question,
+                        "answer": answer,
+                        "mode": agent_mode,
+                    }
+                )
                 with st.expander("Agent debug info"):
                     if result["elapsed_seconds"] is not None:
                         st.write(f"Elapsed time: {result['elapsed_seconds']:.2f} seconds")
@@ -100,11 +117,45 @@ if st.button("Ask BIM Agent"):
 
             elif agent_mode == "OpenAI explanation agent":
                 answer = answer_bim_question_with_openai(question)
+
                 st.subheader("Agent answer")
                 st.markdown(answer)
+
+                st.session_state.messages.append(
+                    {
+                        "question": question,
+                        "answer": answer,
+                        "mode": agent_mode,
+                    }
+                )
+
 
             else:
                 answer = answer_bim_question(question)
+
                 st.subheader("Agent answer")
                 st.markdown(answer)
 
+                st.session_state.messages.append(
+                    {
+                        "question": question,
+                        "answer": answer,
+                        "mode": agent_mode,
+                    }
+                )
+
+
+st.divider()
+st.subheader("Conversation History")
+
+if st.button("Clear conversation history"):
+    st.session_state.messages = []
+    st.rerun()
+
+for message in reversed(st.session_state.messages):
+    with st.chat_message("user"):
+        st.markdown(message["question"])
+
+    with st.chat_message("assistant"):
+        st.markdown(message["answer"])
+        st.caption(f"Mode: {message['mode']}")
