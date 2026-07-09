@@ -10,3 +10,4 @@ duckdb
 pytest
 langchain
 langchain-openai
+langgraph

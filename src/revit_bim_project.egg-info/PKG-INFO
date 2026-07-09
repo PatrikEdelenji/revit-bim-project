@@ -15,3 +15,4 @@ Requires-Dist: duckdb
 Requires-Dist: pytest
 Requires-Dist: langchain
 Requires-Dist: langchain-openai
+Requires-Dist: langgraph
