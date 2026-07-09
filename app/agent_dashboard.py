@@ -1,5 +1,7 @@
 import streamlit as st
 
+from revit_bim_project.ai.langchain_agent import answer_bim_question_with_langchain
+from revit_bim_project.ai.langgraph_agent import answer_bim_question_with_langgraph
 from revit_bim_project.ai.agent import answer_bim_question
 from revit_bim_project.ai.safe_agent import answer_bim_question_safely
 from revit_bim_project.ai.openai_agent import (
@@ -29,6 +31,8 @@ agent_mode = st.sidebar.radio(
     "Choose agent mode:",
     [
         "OpenAI tool-calling agent",
+        "LangChain agent",
+        "LangGraph agent",
         "OpenAI explanation agent",
         "Rule-based agent",
     ],
@@ -83,7 +87,10 @@ if st.button("Ask BIM Agent"):
     else:
         with st.spinner("Analyzing BIM data..."):
             if agent_mode == "OpenAI tool-calling agent":
-                result = answer_bim_question_safely(question)
+                result = answer_bim_question_safely(
+                    question=question,
+                    conversation_history=st.session_state.messages,
+                )
                 answer = result["answer"]
 
                 st.subheader("Agent answer")
@@ -137,6 +144,68 @@ if st.button("Ask BIM Agent"):
                         "mode": agent_mode,
                     }
                 )
+
+            elif agent_mode == "LangChain agent":
+                result = answer_bim_question_with_langchain(
+                    question=question,
+                    conversation_history=st.session_state.messages,
+                )
+
+                answer = result["answer"]
+
+                st.subheader("Agent answer")
+                st.markdown(answer)
+
+                st.session_state.messages.append(
+                    {
+                        "question": question,
+                        "answer": answer,
+                        "mode": agent_mode,
+                    }
+                )
+
+            elif agent_mode == "LangGraph agent":
+                result = answer_bim_question_with_langgraph(
+                    question=question,
+                    conversation_history=st.session_state.messages,
+                )
+
+                answer = result["answer"]
+
+                st.subheader("Agent answer")
+                st.markdown(answer)
+
+                st.session_state.messages.append(
+                    {
+                        "question": question,
+                        "answer": answer,
+                        "mode": agent_mode,
+                    }
+                )
+
+                with st.expander("Agent debug info"):
+                    if result["elapsed_seconds"] is not None:
+                        st.write(f"Elapsed time: {result['elapsed_seconds']:.2f} seconds")
+                    else:
+                        st.write("Elapsed time: not available")
+
+                    st.write(f"Mode: `{result['mode']}`")
+
+                    if result.get("model"):
+                        st.write(f"Model: `{result['model']}`")
+
+                    usage = result.get("usage")
+                    if usage:
+                        st.write("Token usage:")
+                        st.json(usage)
+
+                    if result.get("tool_calls"):
+                        st.write("Tools selected:")
+                        for tool_call in result["tool_calls"]:
+                            st.write(f"- `{tool_call['tool_name']}`")
+                            st.json(tool_call.get("arguments", {}))
+                    else:
+                        st.write("Tool debug info is not extracted yet for the LangChain agent.")
 
 
             else:

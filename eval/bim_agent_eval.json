@@ -17,7 +17,7 @@
   {
     "question": "Give me a BIM summary.",
     "expected_tool": "bim_summary_tool",
-    "expected_contains": ["67", "5663"]
+    "expected_contains": ["67", "5,663"]
   },
   {
     "question": "What materials are used?",
