@@ -11,3 +11,7 @@ Requires-Dist: openai
 Requires-Dist: plotly
 Requires-Dist: scikit-learn
 Requires-Dist: requests
+Requires-Dist: duckdb
+Requires-Dist: pytest
+Requires-Dist: langchain
+Requires-Dist: langchain-openai

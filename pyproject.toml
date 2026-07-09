@@ -18,6 +18,8 @@ dependencies = [
     "requests",
     "duckdb",
     "pytest",
+    "langchain",
+    "langchain-openai",
 ]
 
 [tool.setuptools.packages.find]

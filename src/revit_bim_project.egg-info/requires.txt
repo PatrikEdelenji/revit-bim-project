@@ -6,3 +6,7 @@ openai
 plotly
 scikit-learn
 requests
+duckdb
+pytest
+langchain
+langchain-openai
