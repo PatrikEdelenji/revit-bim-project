@@ -16,6 +16,7 @@ from revit_bim_project.ai.tools import (
     material_summary_tool,
     bim_summary_tool,
     bim_quality_review_tool,
+    bim_rules_retriever_tool,
 )
 
 
@@ -45,6 +46,8 @@ Important rules:
 - If material is "Unknown", explain that the BIM source data is missing material information.
 - Round area and volume values to 2 decimal places.
 - Write clearly for a BIM engineer or project manager.
+- If the user asks generally about BIM rules, BIM standards, metadata requirements, compliance criteria, or quality guidelines, use bim_rules_retriever.
+- If the user asks whether the current BIM model satisfies those rules, use bim_quality_review because it combines rules with actual BIM data.
 """
 
 
@@ -109,6 +112,17 @@ def bim_quality_review() -> str:
     """
     return json.dumps(bim_quality_review_tool(), indent=2)
 
+@tool
+def bim_rules_retriever(query: str, k: int = 3) -> str:
+    """
+    Retrieve relevant BIM quality rule chunks using embedding-based semantic search.
+
+    Use this when the user asks generally about BIM rules, metadata requirements,
+    quality requirements, standards, compliance criteria, or review guidelines.
+    """
+    result = bim_rules_retriever_tool(query=query, k=k)
+    return json.dumps(result, indent=2)
+
 
 TOOLS = [
     area_by_floor,
@@ -117,6 +131,7 @@ TOOLS = [
     material_summary,
     bim_summary,
     bim_quality_review,
+    bim_rules_retriever,
 ]
 
 

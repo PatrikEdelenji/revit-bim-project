@@ -89,6 +89,7 @@ def _map_expected_tool_name(expected_tool: str | None) -> str | None:
         "material_summary_tool": "material_summary",
         "bim_summary_tool": "bim_summary",
         "bim_quality_review_tool": "bim_quality_review",
+        "bim_rules_retriever_tool": "bim_rules_retriever",
     }
 
     return mapping.get(expected_tool, expected_tool)

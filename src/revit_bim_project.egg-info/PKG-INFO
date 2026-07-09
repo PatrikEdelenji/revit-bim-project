@@ -16,3 +16,5 @@ Requires-Dist: pytest
 Requires-Dist: langchain
 Requires-Dist: langchain-openai
 Requires-Dist: langgraph
+Requires-Dist: faiss-cpu
+Requires-Dist: langchain-community
