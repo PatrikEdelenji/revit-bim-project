@@ -21,6 +21,8 @@ dependencies = [
     "langchain",
     "langchain-openai",
     "langgraph",
+    "faiss-cpu",
+    "langchain-community",
 ]
 
 [tool.setuptools.packages.find]

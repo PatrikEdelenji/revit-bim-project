@@ -3,6 +3,8 @@ from revit_bim_project.analytics.room_metrics import (
     get_material_summary,
     get_largest_rooms,
 )
+
+from revit_bim_project.ai.embedding_rag import retrieve_bim_rule_context
 from revit_bim_project.ai.anomaly_detection import detect_room_anomalies
 from revit_bim_project.config.paths import PROCESSED_ROOMS_PATH
 from revit_bim_project.storage.load_processed import load_rooms_parquet
@@ -140,3 +142,13 @@ def bim_quality_review_tool() -> list[dict]:
             "material_summary": materials,
         }
     ]
+
+def bim_rules_retriever_tool(query: str, k: int = 3) -> list[dict]:
+    """
+    Retrieve relevant BIM quality rule chunks using embedding-based semantic search.
+
+    Useful when the user asks about BIM rules, standards, quality requirements,
+    metadata requirements, compliance checks, or manual review criteria.
+    """
+
+    return retrieve_bim_rule_context(query=query, k=k)

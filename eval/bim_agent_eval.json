@@ -43,5 +43,15 @@
     "question": "What is the largest room by volume?",
     "expected_tool": "query_rooms_tool",
     "expected_contains": ["m³"]
+  },
+  {
+    "question": "What metadata should BIM rooms have?",
+    "expected_tool": "bim_rules_retriever_tool",
+    "expected_contains": ["Room ID", "Room name", "Area"]
+  },
+  {
+  "question": "What are the BIM room quality review rules?",
+  "expected_tool": "bim_rules_retriever_tool",
+  "expected_contains": ["Manual review", "Unknown"]
   }
 ]

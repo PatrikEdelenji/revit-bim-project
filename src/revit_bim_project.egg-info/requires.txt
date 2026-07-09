@@ -11,3 +11,5 @@ pytest
 langchain
 langchain-openai
 langgraph
+faiss-cpu
+langchain-community
