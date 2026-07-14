@@ -1,11 +1,18 @@
-import pandas as pd
-from sklearn.ensemble import IsolationForest
+try:
+    import pandas as pd
+    from sklearn.ensemble import IsolationForest
+except ImportError:  # pragma: no cover - optional dependency guard
+    pd = None
+    IsolationForest = None
 
 
-def detect_room_anomalies(df: pd.DataFrame) -> pd.DataFrame:
+def detect_room_anomalies(df):
     """
     Detect anomalies in room data using Isolation Forest.
     """
+
+    if pd is None or IsolationForest is None:
+        raise ImportError("pandas and scikit-learn are required to run anomaly detection.")
 
     required_columns = ["area_m2", "volume_m3"]
 

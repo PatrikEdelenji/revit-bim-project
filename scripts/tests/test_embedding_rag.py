@@ -1,4 +1,4 @@
-from revit_bim_project.ai.embedding_rag import retrieve_bim_rule_context
+from revit_bim_project.ai.rag.embedding_rag import retrieve_bim_rule_context
 
 
 def main():

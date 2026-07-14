@@ -1,5 +1,5 @@
 import streamlit as st
-from revit_bim_project.ai.anomaly_detection import detect_room_anomalies
+from revit_bim_project.ai.ml.anomaly_detection import detect_room_anomalies
 from revit_bim_project.config.paths import PROCESSED_ROOMS_PATH
 from revit_bim_project.storage.load_processed import load_rooms_parquet
 

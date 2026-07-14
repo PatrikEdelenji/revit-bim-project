@@ -5,9 +5,15 @@ from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
-from langchain.agents import create_agent
-from langchain.tools import tool
-from langchain_openai import ChatOpenAI
+
+try:
+    from langchain.agents import create_agent
+    from langchain.tools import tool
+    from langchain_openai import ChatOpenAI
+except ImportError:  # pragma: no cover - optional dependency guard
+    create_agent = None
+    tool = None
+    ChatOpenAI = None
 
 from revit_bim_project.ai.tools import (
     area_by_floor_tool,
@@ -51,13 +57,27 @@ Important rules:
 """
 
 
-@tool
+def _tool_decorator(*args, **kwargs):
+    def decorator(func):
+        return func
+    if args and callable(args[0]) and not kwargs:
+        return args[0]
+    return decorator
+
+
+if tool is not None:
+    tool_decorator = tool
+else:
+    tool_decorator = _tool_decorator
+
+
+@tool_decorator
 def area_by_floor() -> str:
     """Return total BIM room area grouped by floor or level."""
     return json.dumps(area_by_floor_tool(), indent=2)
 
 
-@tool
+@tool_decorator
 def query_rooms(
     sort_by: str = "area_m2",
     ascending: bool = False,
@@ -84,25 +104,25 @@ def query_rooms(
     return json.dumps(result, indent=2)
 
 
-@tool
+@tool_decorator
 def anomalies() -> str:
     """Return rooms detected as anomalies using Isolation Forest."""
     return json.dumps(anomalies_tool(), indent=2)
 
 
-@tool
+@tool_decorator
 def material_summary() -> str:
     """Return BIM room material summary."""
     return json.dumps(material_summary_tool(), indent=2)
 
 
-@tool
+@tool_decorator
 def bim_summary() -> str:
     """Return a general BIM model summary."""
     return json.dumps(bim_summary_tool(), indent=2)
 
 
-@tool
+@tool_decorator
 def bim_quality_review() -> str:
     """
     Evaluate the current BIM model against BIM quality rules.
@@ -112,7 +132,7 @@ def bim_quality_review() -> str:
     """
     return json.dumps(bim_quality_review_tool(), indent=2)
 
-@tool
+@tool_decorator
 def bim_rules_retriever(query: str, k: int = 3) -> str:
     """
     Retrieve relevant BIM quality rule chunks using embedding-based semantic search.
@@ -135,16 +155,20 @@ TOOLS = [
 ]
 
 
-model = ChatOpenAI(
-    model=model_name,
-    api_key=api_key,
-)
+if ChatOpenAI is not None and create_agent is not None:
+    model = ChatOpenAI(
+        model=model_name,
+        api_key=api_key,
+    )
 
-agent = create_agent(
-    model=model,
-    tools=TOOLS,
-    system_prompt=SYSTEM_PROMPT,
-)
+    agent = create_agent(
+        model=model,
+        tools=TOOLS,
+        system_prompt=SYSTEM_PROMPT,
+    )
+else:
+    model = None
+    agent = None
 
 
 def answer_bim_question_with_langchain(
@@ -154,6 +178,9 @@ def answer_bim_question_with_langchain(
     """
     Answer a BIM question using a LangChain agent.
     """
+
+    if agent is None:
+        raise ImportError("LangChain dependencies are not installed. Install langchain, langchain-openai, and langchain-community to use this agent.")
 
     start_time = time.perf_counter()
 
