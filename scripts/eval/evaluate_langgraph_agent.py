@@ -1,10 +1,10 @@
 import json
 from pathlib import Path
 
-from revit_bim_project.ai.langgraph_agent import answer_bim_question_with_langgraph
+from revit_bim_project.ai.agents.langgraph_agent import answer_bim_question_with_langgraph
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 EVAL_FILE = PROJECT_ROOT / "eval" / "bim_agent_eval.json"
 
 

@@ -1,4 +1,4 @@
-from revit_bim_project.ai.embedding_rag import build_bim_rules_vectorstore
+from revit_bim_project.ai.rag.embedding_rag import build_bim_rules_vectorstore
 
 
 def main():
