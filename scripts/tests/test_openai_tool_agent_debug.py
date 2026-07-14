@@ -1,4 +1,4 @@
-from revit_bim_project.ai.openai_tool_agent import (
+from revit_bim_project.ai.agents.openai_tool_agent import (
     answer_bim_question_with_tool_calling_debug,
 )
 

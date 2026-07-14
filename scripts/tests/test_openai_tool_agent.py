@@ -1,4 +1,4 @@
-from revit_bim_project.ai.agent import answer_bim_question
+from revit_bim_project.ai.agents.openai_tool_agent import answer_bim_question_with_tool_calling
 
 
 def main():
@@ -14,7 +14,8 @@ def main():
         print("=" * 80)
         print(f"Question: {question}")
         print()
-        print(answer_bim_question(question))
+        answer = answer_bim_question_with_tool_calling(question)
+        print(answer)
         print()
 
 

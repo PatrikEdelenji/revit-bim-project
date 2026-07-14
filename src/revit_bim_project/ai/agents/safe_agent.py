@@ -1,5 +1,5 @@
-from revit_bim_project.ai.agent import answer_bim_question
-from revit_bim_project.ai.openai_tool_agent import (
+from revit_bim_project.ai.agents.rule_based_agent import answer_bim_question
+from revit_bim_project.ai.agents.openai_tool_agent import (
     answer_bim_question_with_tool_calling_debug,
 )
 from revit_bim_project.utils.logging_utils import get_agent_logger

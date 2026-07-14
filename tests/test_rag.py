@@ -1,4 +1,4 @@
-from revit_bim_project.ai.rag import load_bim_quality_rules
+from revit_bim_project.ai.rag.simple_rag import load_bim_quality_rules
 
 
 def test_load_bim_quality_rules_returns_text():

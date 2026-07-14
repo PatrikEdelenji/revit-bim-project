@@ -1,10 +1,10 @@
 import streamlit as st
 
-from revit_bim_project.ai.langchain_agent import answer_bim_question_with_langchain
-from revit_bim_project.ai.langgraph_agent import answer_bim_question_with_langgraph
-from revit_bim_project.ai.agent import answer_bim_question
-from revit_bim_project.ai.safe_agent import answer_bim_question_safely
-from revit_bim_project.ai.openai_agent import (
+from revit_bim_project.ai.agents.langchain_agent import answer_bim_question_with_langchain
+from revit_bim_project.ai.agents.langgraph_agent import answer_bim_question_with_langgraph
+from revit_bim_project.ai.agents.rule_based_agent import answer_bim_question
+from revit_bim_project.ai.agents.safe_agent import answer_bim_question_safely
+from revit_bim_project.ai.agents.openai_explanation_agent import (
     answer_bim_question_with_openai,
     generate_bim_quality_report,
 )

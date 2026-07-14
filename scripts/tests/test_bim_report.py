@@ -1,4 +1,4 @@
-from revit_bim_project.ai.openai_agent import generate_bim_quality_report
+from revit_bim_project.ai.agents.openai_explanation_agent import generate_bim_quality_report
 
 
 def main():

@@ -1,4 +1,4 @@
-from revit_bim_project.ai.langgraph_agent import answer_bim_question_with_langgraph
+from revit_bim_project.ai.agents.langgraph_agent import answer_bim_question_with_langgraph
 
 
 def main():

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
 BIM_RULES_PATH = PROJECT_ROOT / "docs" / "bim_rules" / "bim_room_quality_rules.md"
 
 

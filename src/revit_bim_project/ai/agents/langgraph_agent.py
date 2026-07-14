@@ -1,8 +1,12 @@
 from typing import Any, TypedDict
 
-from langgraph.graph import StateGraph, START, END
+try:
+    from langgraph.graph import StateGraph, START, END
+except ImportError:  # pragma: no cover - optional dependency guard
+    StateGraph = None
+    START = END = None
 
-from revit_bim_project.ai.langchain_agent import answer_bim_question_with_langchain
+from revit_bim_project.ai.agents.langchain_agent import answer_bim_question_with_langchain
 
 
 class BIMGraphState(TypedDict, total=False):
@@ -71,6 +75,9 @@ def finalize_response_node(state: BIMGraphState) -> BIMGraphState:
 
 
 def build_bim_langgraph_workflow():
+    if StateGraph is None:
+        raise ImportError("LangGraph is not installed. Install langgraph to use this workflow.")
+
     graph = StateGraph(BIMGraphState)
 
     graph.add_node("prepare_context", prepare_context_node)
@@ -85,7 +92,10 @@ def build_bim_langgraph_workflow():
     return graph.compile()
 
 
-bim_langgraph_workflow = build_bim_langgraph_workflow()
+try:
+    bim_langgraph_workflow = build_bim_langgraph_workflow()
+except ImportError:
+    bim_langgraph_workflow = None
 
 
 def answer_bim_question_with_langgraph(
@@ -95,6 +105,9 @@ def answer_bim_question_with_langgraph(
     """
     Answer a BIM question using a LangGraph workflow around the LangChain agent.
     """
+
+    if bim_langgraph_workflow is None:
+        raise ImportError("LangGraph is not installed. Install langgraph to use this workflow.")
 
     result = bim_langgraph_workflow.invoke(
         {

@@ -1,4 +1,4 @@
-from revit_bim_project.ai.langchain_agent import answer_bim_question_with_langchain
+from revit_bim_project.ai.agents.langchain_agent import answer_bim_question_with_langchain
 
 
 def main():

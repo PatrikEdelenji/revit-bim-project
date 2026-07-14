@@ -2,10 +2,17 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from langchain_community.vectorstores import FAISS
-from langchain_core.documents import Document
-from langchain_openai import OpenAIEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+try:
+    from langchain_community.vectorstores import FAISS
+    from langchain_core.documents import Document
+    from langchain_openai import OpenAIEmbeddings
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+except ImportError:  # pragma: no cover - optional dependency guard
+    FAISS = None
+    Document = None
+    OpenAIEmbeddings = None
+    RecursiveCharacterTextSplitter = None
 
 from revit_bim_project.config.paths import PROJECT_ROOT
 
@@ -17,10 +24,13 @@ VECTOR_STORE_DIR = PROJECT_ROOT / "data" / "vectorstores" / "bim_rules_faiss"
 load_dotenv(dotenv_path=ENV_PATH)
 
 
-def load_bim_rule_documents() -> list[Document]:
+def load_bim_rule_documents() -> list:
     """
     Load BIM rule Markdown files as LangChain Documents.
     """
+
+    if Document is None:
+        raise ImportError("LangChain dependencies are not installed. Install langchain-community, langchain-core, langchain-openai, and langchain-text-splitters to use embedding RAG.")
 
     documents = []
 
@@ -43,10 +53,13 @@ def load_bim_rule_documents() -> list[Document]:
     return documents
 
 
-def split_documents(documents: list[Document]) -> list[Document]:
+def split_documents(documents: list) -> list:
     """
     Split long BIM rule documents into smaller retrievable chunks.
     """
+
+    if RecursiveCharacterTextSplitter is None:
+        raise ImportError("LangChain dependencies are not installed. Install langchain-text-splitters to use embeddings splitting.")
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=600,
@@ -56,7 +69,7 @@ def split_documents(documents: list[Document]) -> list[Document]:
     return splitter.split_documents(documents)
 
 
-def build_bim_rules_vectorstore() -> FAISS:
+def build_bim_rules_vectorstore():
     """
     Build and save a FAISS vector store from BIM rule documents.
     """
@@ -85,7 +98,7 @@ def build_bim_rules_vectorstore() -> FAISS:
     return vectorstore
 
 
-def load_bim_rules_vectorstore() -> FAISS:
+def load_bim_rules_vectorstore():
     """
     Load the saved FAISS vector store.
     """
@@ -114,6 +127,9 @@ def retrieve_bim_rule_context(query: str, k: int = 3) -> list[dict]:
     """
     Retrieve the most relevant BIM rule chunks for a question.
     """
+
+    if FAISS is None or OpenAIEmbeddings is None:
+        raise ImportError("LangChain dependencies are not installed. Install langchain-community and langchain-openai to retrieve rule context.")
 
     vectorstore = load_bim_rules_vectorstore()
 
